@@ -1,0 +1,12 @@
+{
+  "name": "pdf-reader",
+  "version": "0.0.1",
+  "description": "PDF online reader and editor",
+  "dependencies": {
+    "connect-multiparty": "^2.0.0",
+    "express": "^4.13.3",
+    "fs": "0.0.2",
+    "multer": "^1.1.0",
+    "multiparty": "^4.1.2"
+  }
+}
