@@ -6,6 +6,7 @@ var http = require("http").Server(app);
 var multer = require("multer");
 var upload = multer({dest:'uploads/'});//set the destiation for the files uploaded. The files are saved in the same folder as index.js
 var filepath = "";
+var io = require("socket.io")(http);
 
 app.get("/",function(req, res){
     res.sendFile(__dirname+"/index.html")
@@ -13,16 +14,29 @@ app.get("/",function(req, res){
 
 app.post('/upload_action', upload.single("pdf"), function (req, res) {
     res.sendFile(__dirname+"/upload.html")
-    console.log(req.body);//request.body contains all the text fields
-    console.log(req.file);//req.file get the current file
+    //console.log(req.body);//request.body contains all the text fields
+    //console.log(req.file);//req.file get the current file
     filepath = req.file.path;
 });
 
-app.get("/image.jpg",function(req,res){//send file to image src
-    console.log("filepath "+filepath);
+app.get("/askforsrc",function(req,res){//send file to image src
+    //console.log("filepath "+filepath);
+    res.contentType("application/pdf");
     res.sendFile(__dirname+"/"+filepath);
 });
 
 http.listen(3000, function(){
     console.log("listening  on 3000");
+});
+
+app.get("/upload_action",function(req, res){
+    res.sendfile("upload.html");
+});
+
+io.on("connection",function(socket){
+    console.log("a user has connected");
+    socket.on("chat message", function(msg){
+        console.log("message "+msg);
+        io.emit("chat message", msg);
+    });
 });

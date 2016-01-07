@@ -1,0 +1,31 @@
+html, body{
+	background-color: RGB(139,208,197);
+	height:100%;
+	width:100%;
+}
+
+#pdf_display{
+	float:left;
+	width:70%; 
+	height:100%; 
+}
+#commment{
+	float:right;
+	width:30%;
+}
+#message{
+	height:50px;
+	width:100%;
+
+}
+#send{
+	background: rgb(46, 74, 53); 
+	border: none; 
+	color:white;
+}
+form {
+	padding: 1px; 
+	position: fixed; 
+	bottom: 0; 
+	width: 100%; 
+}

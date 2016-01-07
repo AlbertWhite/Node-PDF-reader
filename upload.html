@@ -1,9 +1,64 @@
 <!doctype html>
 <html>
-    <head>
-    </head>
-    <body>
-        File uploaded
-        <img src="/image.jpg">
-    </body>
+<head>
+	<style>
+		html, body{
+			background-color: RGB(139,208,197);
+			height:100%;
+			width:100%;
+		}
+
+		#pdf_display{
+			float:left;
+			width:70%;
+			height:100%;
+		}
+		#commment{
+			float:right;
+			width:30%;
+		}
+		#message{
+			height:50px;
+			width:100%;
+
+		}
+		#send{
+			background: rgb(46, 74, 53);
+			border: none;
+			color:white;
+		}
+		form {
+			padding: 1px;
+			position: fixed;
+			bottom: 0;
+			width: 100%;
+		}
+
+	</style>
+</head>
+<body>
+	<iframe id="pdf_display" src="askforsrc" frameborder="0"></iframe>
+	<div id="commment">
+		<ul id="messages"></ul>
+		<form action="">
+			<input id="message" autocomplete="off" />
+			<input id="send" type="submit" value="Send"/>
+		</form>
+	</div>
+
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script><!--The js file is in the server's path. Ask for the js file on the server, not locally-->
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script type="text/javascript">
+        var socket = io();
+        $("form").submit(function(){
+            socket.emit("chat message", $("#message").val());
+            console.log("emit");
+            $("#message").val("");
+            return false;
+        });
+        socket.on("chat message", function(msg){
+            $('#messages').append($('<li>').text(msg));
+        });
+    </script>
+</body>
 </html>
