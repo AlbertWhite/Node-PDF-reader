@@ -8,6 +8,8 @@ var upload = multer({dest:'uploads/'});//set the destiation for the files upload
 var filepath = "";
 var io = require("socket.io")(http);
 
+var fileList = [];
+
 app.get("/",function(req, res){
     res.sendFile(__dirname+"/index.html")
 });
@@ -15,13 +17,18 @@ app.get("/",function(req, res){
 app.post('/upload_action', upload.single("pdf"), function (req, res) {
     res.sendFile(__dirname+"/upload.html")
     //console.log(req.body);//request.body contains all the text fields
-    //console.log(req.file);//req.file get the current file
+    console.log(req.file);//req.file get the current file
     filepath = req.file.path;
+
+    var file = {name:req.file.originalname, path:filepath};
+    fileList.push(file);
+    //console.log(fileList);
 });
 
 app.get("/askforsrc",function(req,res){//send file to image src
     //console.log("filepath "+filepath);
     res.contentType("application/pdf");
+    console.log("before "+__dirname+"/"+filepath);
     res.sendFile(__dirname+"/"+filepath);
 });
 
@@ -38,5 +45,19 @@ io.on("connection",function(socket){
     socket.on("chat message", function(msg){
         console.log("message "+msg);
         io.emit("chat message", msg);
+    });
+    socket.on("filelist", function(msg){
+        io.emit("filelist", fileList);
+    });
+    socket.on("changepdf", function(msg){
+        console.log(__dirname+"/"+fileList[msg - 1].path);
+
+        //io.emit("changepdf",__dirname+"/"+fileList[msg - 1].path);
+        app.get("/askforsrc",function(req,res){//send file to image src
+            //console.log("filepath "+filepath);
+            res.contentType("application/pdf");
+            console.log("before "+__dirname+"/"+filepath);
+            res.sendFile(__dirname+"/"+filepath);
+        });
     });
 });

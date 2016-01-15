@@ -1,13 +1,38 @@
 <!doctype html>
 <html>
 <head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css">
 	<style>
 		html, body{
+			margin:0;
 			background-color: RGB(139,208,197);
 			height:100%;
 			width:100%;
+			font-family:helvetica;
 		}
-
+		#menu{
+			height:50px;
+			background-color: rgb(46,74,53);
+			color:white;
+		}
+		.item{
+			height:50px;
+			width:20%;
+			display:inline-block;
+			text-align: center;
+			line-height: 50px; 
+			/*set vertical align: set div height and line-height*/
+		}
+		#username{
+			float:right;
+		}
+		.item span{
+			font-size: 15px;
+		}
+		#content{
+			height:90%;
+		}
 		#pdf_display{
 			float:left;
 			width:70%;
@@ -20,7 +45,6 @@
 		#message{
 			height:50px;
 			width:100%;
-
 		}
 		#send{
 			background: rgb(46, 74, 53);
@@ -31,34 +55,141 @@
 			padding: 1px;
 			position: fixed;
 			bottom: 0;
-			width: 100%;
+			width: 90%;
+		}
+		.modal-header {
+			background-color: red;
+		}
+
+		.btn-file {
+		    position: relative;
+		    overflow: hidden;
+		}
+		.btn-file input[type=file] {
+		    position: absolute;
+		    top: 0;
+		    right: 0;
+		    min-width: 100%;
+		    min-height: 100%;
+		    font-size: 100px;
+		    text-align: right;
+		    filter: alpha(opacity=0);
+		    opacity: 0;
+		    outline: none;
+		    background: white;
+		    cursor: inherit;
+		    display: block;
 		}
 
 	</style>
 </head>
 <body>
-	<iframe id="pdf_display" src="askforsrc" frameborder="0"></iframe>
-	<div id="commment">
-		<ul id="messages"></ul>
-		<form action="">
-			<input id="message" autocomplete="off" />
-			<input id="send" type="submit" value="Send"/>
-		</form>
+	<div id="menu">
+		<div class="item" id="upload">
+			<span>Upload New File</span>
+		</div>
+		<div class="item" id="check">
+			<span>Check File List</span>
+		</div>
+		<div class="item" id="username">
+			<span>Edit User Name</span>
+		</div>
+	</div>
+	<div id = "content">
+		<iframe id="pdf_display" src="askforsrc" frameborder="0" ></iframe>
+		<div id="commment">
+			<ul id="messages"></ul>
+			<form action="">
+				<input id="message" autocomplete="off" />
+				<input id="send" type="submit" value="Send"/>
+			</form>
+		</div>
 	</div>
 
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script><!--The js file is in the server's path. Ask for the js file on the server, not locally-->
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script type="text/javascript">
-        var socket = io();
-        $("form").submit(function(){
-            socket.emit("chat message", $("#message").val());
-            console.log("emit");
-            $("#message").val("");
-            return false;
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script><!--The js file is in the server's path. Ask for the js file on the server, not locally-->
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
+	<script type="text/javascript">
+
+
+
+		var socket = io();
+		$("form").submit(function(){
+			socket.emit("chat message", $("#message").val());
+			$("#message").val("");
+			return false;
+		});
+		socket.on("chat message", function(msg){
+			$('#messages').append($('<li>').text(msg));
+		});
+	</script>
+	<script type="text/javascript">
+		$(".item").hover(function(){
+			$(this).css("background-color","rgb(0,130,32)");
+		});
+		$(".item").mouseleave(function(){
+			$(this).css("background-color","rgb(46,74,53");
+		});
+		$("#upload").click(function(){
+
+			var dialog = new BootstrapDialog({
+				title:"Upload",
+				message: "Please select the PDF file you want to view<br/><br/><br/><br/><br/>"
+				+"<form action='upload_action' enctype='multipart/form-data' method='post'>"
+            	+"<input type='text' name='name'/>"
+            	+"<input type='file' name='pdf' class='btn-file'/>"
+            	+"<input type='submit' value='send' class='btn btn-success' style='width:100%;'/>"
+        		+"</form>"
+			});
+			dialog.realize();//if you want to do something on the dialog, we could use this
+			dialog.getModalHeader().css('background-color', "rgb(46,74,53)");
+			dialog.getModalBody().css('background-color', 'RGB(83,167,113)');
+			dialog.getModalBody().css('color', '#fff');
+			dialog.open();
+			
+		});
+
+        $("#check").click(function(){
+            socket.emit("filelist", "ask");
+            socket.on("filelist", function(msg){
+                var dialog = new BootstrapDialog({
+                    title:"File List",
+                    message: function(dialogRef){
+                        var $message =  $('<div></div>');
+                        for(var i = 0; i < msg.length ;i++){
+                            $message.append("<div class='changePDF'>"+msg[i].name+"</div><hr/>")
+									.click(function(){//add click function after append
+										socket.emit("changepdf", i);
+										socket.on("changepdf", function(msg){
+											console.log(msg);
+											//$("#pdf_display").contents.contentType = "application/pdf";
+											//$("#pdf_display").attr("src",msg);
+											app.get("/askforsrc",function(req,res){//send file to image src
+												console.log("filepath "+filepath);
+												res.contentType("application/pdf");
+												console.log("before "+__dirname+"/"+filepath);
+												res.sendFile(__dirname+"/"+filepath);
+											});
+										});
+									});
+                        }
+                        return $message;
+                    }
+                });
+//why?append function not work				$("#b").on("click",function(){
+//					console.log("xxxxx");
+//				});
+
+                dialog.realize();//if you want to do something on the dialog, we could use this
+                dialog.getModalHeader().css('background-color', "rgb(46,74,53)");
+                dialog.getModalBody().css('background-color', 'RGB(83,167,113)');
+                dialog.getModalBody().css('color', '#fff');
+                dialog.open();
+            });
         });
-        socket.on("chat message", function(msg){
-            $('#messages').append($('<li>').text(msg));
-        });
-    </script>
+
+
+	</script>
 </body>
 </html>
