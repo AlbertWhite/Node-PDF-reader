@@ -42,21 +42,21 @@ app.get("/upload_action",function(req, res){
 
 io.on("connection",function(socket){
     console.log("a user has connected");
-    socket.on("chat message", function(msg){
-        console.log("message "+msg);
-        io.emit("chat message", msg);
+    socket.on("message", function(msg){
+        console.dir("message "+msg);
+        io.emit("message", msg);
     });
     socket.on("filelist", function(msg){
         io.emit("filelist", fileList);
     });
     socket.on("changepdf", function(msg){
-        console.log(__dirname+"/"+fileList[msg - 1].path);
+        //console.log(__dirname+"/"+fileList[msg - 1].path);
 
         //io.emit("changepdf",__dirname+"/"+fileList[msg - 1].path);
         app.get("/askforsrc",function(req,res){//send file to image src
             //console.log("filepath "+filepath);
             res.contentType("application/pdf");
-            console.log("before "+__dirname+"/"+filepath);
+            //console.log("before "+__dirname+"/"+filepath);
             res.sendFile(__dirname+"/"+filepath);
         });
     });

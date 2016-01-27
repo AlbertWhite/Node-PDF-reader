@@ -1,0 +1,205 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'pdfutils' ]
+2 info using npm@2.14.7
+3 info using node@v4.2.3
+4 verbose install initial load of /Users/Yuebai/Desktop/PDFReader/package.json
+5 warn package.json pdf-reader@0.0.1 No repository field.
+6 warn package.json pdf-reader@0.0.1 No README data
+7 warn package.json pdf-reader@0.0.1 No license field.
+8 verbose installManyTop reading scoped package data from /Users/Yuebai/Desktop/PDFReader/node_modules/connect-multiparty/package.json
+9 verbose installManyTop reading scoped package data from /Users/Yuebai/Desktop/PDFReader/node_modules/express/package.json
+10 verbose installManyTop reading scoped package data from /Users/Yuebai/Desktop/PDFReader/node_modules/fs/package.json
+11 verbose installManyTop reading scoped package data from /Users/Yuebai/Desktop/PDFReader/node_modules/multer/package.json
+12 verbose installManyTop reading scoped package data from /Users/Yuebai/Desktop/PDFReader/node_modules/multiparty/package.json
+13 verbose installManyTop reading scoped package data from /Users/Yuebai/Desktop/PDFReader/node_modules/socket.io/package.json
+14 info package.json fs@0.0.2 fs is also the name of a node core module.
+15 info package.json fs@0.0.2 No description
+16 info package.json fs@0.0.2 No repository field.
+17 info package.json fs@0.0.2 No README data
+18 verbose readDependencies loading dependencies from /Users/Yuebai/Desktop/PDFReader/package.json
+19 silly cache add args [ 'pdfutils', null ]
+20 verbose cache add spec pdfutils
+21 silly cache add parsed spec Result {
+21 silly cache add   raw: 'pdfutils',
+21 silly cache add   scope: null,
+21 silly cache add   name: 'pdfutils',
+21 silly cache add   rawSpec: '',
+21 silly cache add   spec: '*',
+21 silly cache add   type: 'range' }
+22 silly addNamed pdfutils@*
+23 verbose addNamed "*" is a valid semver range for pdfutils
+24 silly addNameRange { name: 'pdfutils', range: '*', hasData: false }
+25 silly mapToRegistry name pdfutils
+26 silly mapToRegistry using default registry
+27 silly mapToRegistry registry https://registry.npmjs.org/
+28 silly mapToRegistry uri https://registry.npmjs.org/pdfutils
+29 verbose addNameRange registry:https://registry.npmjs.org/pdfutils not in flight; fetching
+30 verbose request uri https://registry.npmjs.org/pdfutils
+31 verbose request no auth needed
+32 info attempt registry request try #1 at 2:54:38 PM
+33 verbose request id 5d6e4e836bbfa1cd
+34 verbose etag "EL1DZ5XAMCW6L3J0RJEYZS4LH"
+35 http request GET https://registry.npmjs.org/pdfutils
+36 http 304 https://registry.npmjs.org/pdfutils
+37 verbose headers { date: 'Fri, 22 Jan 2016 13:54:38 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   etag: '"EL1DZ5XAMCW6L3J0RJEYZS4LH"',
+37 verbose headers   age: '0',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-fra1242-FRA',
+37 verbose headers   'x-cache': 'HIT',
+37 verbose headers   'x-cache-hits': '1',
+37 verbose headers   'x-timer': 'S1453470878.922151,VS0,VE109',
+37 verbose headers   vary: 'Accept' }
+38 silly get cb [ 304,
+38 silly get   { date: 'Fri, 22 Jan 2016 13:54:38 GMT',
+38 silly get     via: '1.1 varnish',
+38 silly get     'cache-control': 'max-age=300',
+38 silly get     etag: '"EL1DZ5XAMCW6L3J0RJEYZS4LH"',
+38 silly get     age: '0',
+38 silly get     connection: 'keep-alive',
+38 silly get     'x-served-by': 'cache-fra1242-FRA',
+38 silly get     'x-cache': 'HIT',
+38 silly get     'x-cache-hits': '1',
+38 silly get     'x-timer': 'S1453470878.922151,VS0,VE109',
+38 silly get     vary: 'Accept' } ]
+39 verbose etag https://registry.npmjs.org/pdfutils from cache
+40 verbose get saving pdfutils to /Users/Yuebai/.npm/registry.npmjs.org/pdfutils/.cache.json
+41 silly addNameRange number 2 { name: 'pdfutils', range: '*', hasData: true }
+42 silly addNameRange versions [ 'pdfutils',
+42 silly addNameRange   [ '0.0.1',
+42 silly addNameRange     '0.0.2',
+42 silly addNameRange     '0.0.3',
+42 silly addNameRange     '0.0.4',
+42 silly addNameRange     '0.1.0',
+42 silly addNameRange     '0.1.1',
+42 silly addNameRange     '0.2.0',
+42 silly addNameRange     '0.2.1',
+42 silly addNameRange     '0.3.0',
+42 silly addNameRange     '0.3.1',
+42 silly addNameRange     '0.3.2' ] ]
+43 silly addNamed pdfutils@0.3.2
+44 verbose addNamed "0.3.2" is a plain semver version for pdfutils
+45 silly cache afterAdd pdfutils@0.3.2
+46 verbose afterAdd /Users/Yuebai/.npm/pdfutils/0.3.2/package/package.json not in flight; writing
+47 verbose afterAdd /Users/Yuebai/.npm/pdfutils/0.3.2/package/package.json written
+48 silly install resolved [ { name: 'pdfutils',
+48 silly install resolved     version: '0.3.2',
+48 silly install resolved     author: { name: 'Enno Boland', email: 'eb@s01.de' },
+48 silly install resolved     description: 'tool for analyzing and converting PDF documents.',
+48 silly install resolved     main: './index',
+48 silly install resolved     repository:
+48 silly install resolved      { type: 'git',
+48 silly install resolved        url: 'git+https://github.com/Gottox/node-pdfutils.git' },
+48 silly install resolved     keywords: [ 'pdf', 'document', 'util' ],
+48 silly install resolved     dependencies: {},
+48 silly install resolved     devDependencies: {},
+48 silly install resolved     scripts: { test: 'make test', install: 'node-gyp rebuild' },
+48 silly install resolved     license: 'GPL',
+48 silly install resolved     engine: { node: '>=0.6' },
+48 silly install resolved     gypfile: true,
+48 silly install resolved     bugs: { url: 'https://github.com/Gottox/node-pdfutils/issues' },
+48 silly install resolved     homepage: 'https://github.com/Gottox/node-pdfutils',
+48 silly install resolved     _id: 'pdfutils@0.3.2',
+48 silly install resolved     _shasum: '9205751ccc5b8db21a5b7a5f2f7f54cbaf694993',
+48 silly install resolved     _from: 'pdfutils@*',
+48 silly install resolved     _npmVersion: '1.4.9',
+48 silly install resolved     _npmUser: { name: 'gottox', email: 'g@s01.de' },
+48 silly install resolved     maintainers: [ [Object] ],
+48 silly install resolved     dist:
+48 silly install resolved      { shasum: '9205751ccc5b8db21a5b7a5f2f7f54cbaf694993',
+48 silly install resolved        tarball: 'http://registry.npmjs.org/pdfutils/-/pdfutils-0.3.2.tgz' },
+48 silly install resolved     directories: {},
+48 silly install resolved     _resolved: 'https://registry.npmjs.org/pdfutils/-/pdfutils-0.3.2.tgz',
+48 silly install resolved     readme: 'ERROR: No README data found!' } ]
+49 info install pdfutils@0.3.2 into /Users/Yuebai/Desktop/PDFReader
+50 info installOne pdfutils@0.3.2
+51 verbose installOne of pdfutils to /Users/Yuebai/Desktop/PDFReader not in flight; installing
+52 verbose lock using /Users/Yuebai/.npm/_locks/pdfutils-b5c4d5179593bdd4.lock for /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+53 silly install write writing pdfutils 0.3.2 to /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+54 verbose unbuild node_modules/pdfutils
+55 silly gentlyRm /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils is being purged from base /Users/Yuebai/Desktop/PDFReader
+56 verbose gentlyRm don't care about contents; nuking /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+57 verbose tar unpack /Users/Yuebai/.npm/pdfutils/0.3.2/package.tgz
+58 verbose tar unpacking to /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+59 silly gentlyRm /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils is being purged
+60 verbose gentlyRm don't care about contents; nuking /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+61 silly gunzTarPerm modes [ '755', '644' ]
+62 silly gunzTarPerm extractEntry package.json
+63 silly gunzTarPerm extractEntry README.md
+64 silly gunzTarPerm extractEntry index.js
+65 silly gunzTarPerm extractEntry Makefile
+66 silly gunzTarPerm extractEntry binding.gyp
+67 silly gunzTarPerm extractEntry examples/pdfserver/app.js
+68 silly gunzTarPerm extractEntry lib/pdfutils.js
+69 silly gunzTarPerm extractEntry src/page.cc
+70 silly gunzTarPerm extractEntry src/document.cc
+71 silly gunzTarPerm extractEntry src/formats.cc
+72 silly gunzTarPerm extractEntry src/formats.h
+73 silly gunzTarPerm extractEntry src/init.cc
+74 silly gunzTarPerm extractEntry src/link.cc
+75 silly gunzTarPerm extractEntry src/link.h
+76 silly gunzTarPerm extractEntry src/document.h
+77 silly gunzTarPerm extractEntry src/page.h
+78 silly gunzTarPerm extractEntry src/page_job.cc
+79 silly gunzTarPerm extractEntry src/page_job.h
+80 silly gunzTarPerm extractEntry src/svg_size_hack.cc
+81 silly gunzTarPerm extractEntry src/svg_size_hack.h
+82 silly gunzTarPerm extractEntry src/util.h
+83 verbose write writing to /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils/package.json
+84 info preinstall pdfutils@0.3.2
+85 verbose readDependencies loading dependencies from /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils/package.json
+86 verbose readDependencies loading dependencies from /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils/package.json
+87 silly install resolved []
+88 verbose about to build /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+89 info build /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+90 info linkStuff pdfutils@0.3.2
+91 silly linkStuff pdfutils@0.3.2 has /Users/Yuebai/Desktop/PDFReader/node_modules as its parent node_modules
+92 verbose linkBins pdfutils@0.3.2
+93 verbose linkMans pdfutils@0.3.2
+94 verbose rebuildBundles pdfutils@0.3.2
+95 info install pdfutils@0.3.2
+96 verbose unsafe-perm in lifecycle true
+97 info pdfutils@0.3.2 Failed to exec install script
+98 verbose unlock done using /Users/Yuebai/.npm/_locks/pdfutils-b5c4d5179593bdd4.lock for /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+99 verbose stack Error: pdfutils@0.3.2 install: `node-gyp rebuild`
+99 verbose stack Exit status 1
+99 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:214:16)
+99 verbose stack     at emitTwo (events.js:87:13)
+99 verbose stack     at EventEmitter.emit (events.js:172:7)
+99 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:24:14)
+99 verbose stack     at emitTwo (events.js:87:13)
+99 verbose stack     at ChildProcess.emit (events.js:172:7)
+99 verbose stack     at maybeClose (internal/child_process.js:818:16)
+99 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+100 verbose pkgid pdfutils@0.3.2
+101 verbose cwd /Users/Yuebai/Desktop/PDFReader
+102 error Darwin 14.1.0
+103 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "pdfutils"
+104 error node v4.2.3
+105 error npm  v2.14.7
+106 error code ELIFECYCLE
+107 error pdfutils@0.3.2 install: `node-gyp rebuild`
+107 error Exit status 1
+108 error Failed at the pdfutils@0.3.2 install script 'node-gyp rebuild'.
+108 error This is most likely a problem with the pdfutils package,
+108 error not with npm itself.
+108 error Tell the author that this fails on your system:
+108 error     node-gyp rebuild
+108 error You can get their info via:
+108 error     npm owner ls pdfutils
+108 error There is likely additional logging output above.
+109 verbose exit [ 1, true ]
+110 verbose unbuild node_modules/pdfutils
+111 info preuninstall pdfutils@0.3.2
+112 info uninstall pdfutils@0.3.2
+113 verbose unbuild rmStuff pdfutils@0.3.2 from /Users/Yuebai/Desktop/PDFReader/node_modules
+114 info postuninstall pdfutils@0.3.2
+115 silly gentlyRm /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils is being purged from base /Users/Yuebai/Desktop/PDFReader
+116 verbose gentlyRm don't care about contents; nuking /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+117 silly vacuum-fs purging /Users/Yuebai/Desktop/PDFReader/node_modules/pdfutils
+118 silly vacuum-fs quitting because other entries in /Users/Yuebai/Desktop/PDFReader/node_modules

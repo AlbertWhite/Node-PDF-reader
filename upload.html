@@ -6,7 +6,7 @@
 	<style>
 		html, body{
 			margin:0;
-			background-color: RGB(139,208,197);
+			background-color: #D0D0D0;
 			height:100%;
 			width:100%;
 			font-family:helvetica;
@@ -35,52 +35,95 @@
 		}
 		#pdf_display{
 			float:left;
-			width:70%;
-			height:100%;
+			width:69%;
+			height:99%;
+			margin-top:0.5%;
+			margin-left:0.5%;
 		}
 		#commment{
+			background-color: white;
 			float:right;
-			width:30%;
+			width:29%;
+			margin-right: 0.5%;
+			margin-top:0.5%;
+			height:99%;
+		}
+		#page_number{
+			margin-top: 10px;
+			padding-left: 10px;
 		}
 		#message{
-			height:50px;
+			margin-top: 5px;
 			width:100%;
+			padding-top: 5px;
+			padding-left: 10px;
+		}
+		.message_title{
+			background-color: rgb(46, 74, 53);
+			text-align: center;
+			color:white;
+		}
+		textarea:focus { 
+			outline: none !important;
 		}
 		#send{
 			background: rgb(46, 74, 53);
 			border: none;
 			color:white;
+			width:100px;
+			float:right;
+			margin-top: 10px;
 		}
 		form {
-			padding: 1px;
-			position: fixed;
-			bottom: 0;
-			width: 90%;
+			width: 96%;
+			margin-left:2%;
+			margin-top:3%;
 		}
 		.modal-header {
 			background-color: red;
 		}
 
 		.btn-file {
-		    position: relative;
-		    overflow: hidden;
+			position: relative;
+			overflow: hidden;
 		}
 		.btn-file input[type=file] {
-		    position: absolute;
-		    top: 0;
-		    right: 0;
-		    min-width: 100%;
-		    min-height: 100%;
-		    font-size: 100px;
-		    text-align: right;
-		    filter: alpha(opacity=0);
-		    opacity: 0;
-		    outline: none;
-		    background: white;
-		    cursor: inherit;
-		    display: block;
+			position: absolute;
+			top: 0;
+			right: 0;
+			min-width: 100%;
+			min-height: 100%;
+			font-size: 100px;
+			text-align: right;
+			filter: alpha(opacity=0);
+			opacity: 0;
+			outline: none;
+			background: white;
+			cursor: inherit;
+			display: block;
 		}
 
+		#form_div{
+			height:25%;
+		}
+
+		#center_div{
+			height:1%;
+			width:100%;
+			background-color:#D0D0D0;
+		}
+
+		.span_text{
+			font-weight: bold;
+		}
+		.person{
+			color:grey;
+			float:right;
+			font-size:12px;
+		}
+		.message_text{
+			margin-left:10px;
+		}
 	</style>
 </head>
 <body>
@@ -98,11 +141,20 @@
 	<div id = "content">
 		<iframe id="pdf_display" src="askforsrc" frameborder="0" ></iframe>
 		<div id="commment">
-			<ul id="messages"></ul>
-			<form action="">
-				<input id="message" autocomplete="off" />
-				<input id="send" type="submit" value="Send"/>
-			</form>
+			<div id="form_div">
+				<form action="">
+					<span class="span_text">Please leave your comments here:</span>	
+					<textarea rows="1" id="page_number" placeholder="Page Number"></textarea>
+					<br/>
+					<textarea id="message" placeholder="Comment"></textarea>
+					<input id="send" type="submit" value="Send"/>
+				</form>
+			</div>
+			<div id="center_div">
+				
+			</div>
+			<div id="messages">
+			</div>
 		</div>
 	</div>
 
@@ -111,36 +163,77 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
 	<script type="text/javascript">
-
-
-
+		var username = "Human";
+		var comment_page = [];
+		var comments = [];
 		var socket = io();
+		var myDate = new Date();
 		$("form").submit(function(){
-			socket.emit("chat message", $("#message").val());
-			$("#message").val("");
+			var message = {"user_name":username,"page_number":$("#page_number").val(), "chat_message":$("#message").val()};
+			socket.emit("message", message);
 			return false;
 		});
-		socket.on("chat message", function(msg){
-			$('#messages').append($('<li>').text(msg));
+		socket.on("message", function(msg){
+			if($.inArray(msg.page_number,comment_page) == -1){
+				comment_page.push(msg.page_number);
+			}
+			comments.push({"page_number":msg.page_number,"chat_message":msg.chat_message,"user_name":msg.user_name});
+			sort_comments(comments);
 		});
+		function sort_comments(comments){
+
+			$('#messages').empty();
+			comment_page.sort(function(a, b){return a-b});
+			for(var i = 0;i < comment_page.length;i++){
+				$('#messages').append("<div id='page_"+comment_page[i]+"''><div class='message_title'>"+"Page "+comment_page[i]+"</div></div><br/>");
+			}
+
+			for(var i = 0; i < comments.length;i++){
+				$("#page_"+comments[i].page_number).append("<div class='message_text'>"+comments[i].chat_message+"<br/><span class='person'>"+" - "+comments[i].user_name+"   "+(myDate.getMonth()+1) + '/' + (myDate.getDate()) + '/' + myDate.getFullYear()+" "+myDate.getHours()+":"+myDate.getMinutes()+"</span></div><br/>");
+			}
+		}
 	</script>
 	<script type="text/javascript">
+
+
 		$(".item").hover(function(){
 			$(this).css("background-color","rgb(0,130,32)");
 		});
 		$(".item").mouseleave(function(){
 			$(this).css("background-color","rgb(46,74,53");
 		});
+
+		$("#username").click(function(){
+			var dialog = new BootstrapDialog({
+				title:"Edit User Name",
+				animate:false,
+				message: $('<textarea class="form-control" id ="text_username" placeholder="Type your new username here.."></textarea>'),
+				buttons:[{
+					label:"Submit",
+					action:function(dialog){
+						username = $("#text_username").val();
+						 dialog.close();
+					}
+				}]
+			});
+			dialog.realize();//if you want to do something on the dialog, we could use this
+			dialog.getModalHeader().css('background-color', "rgb(46,74,53)");
+			dialog.getModalBody().css('background-color', 'RGB(83,167,113)');
+			dialog.getModalBody().css('color', '#fff');
+			dialog.open();
+		});
+
+
 		$("#upload").click(function(){
 
 			var dialog = new BootstrapDialog({
 				title:"Upload",
 				message: "Please select the PDF file you want to view<br/><br/><br/><br/><br/>"
 				+"<form action='upload_action' enctype='multipart/form-data' method='post'>"
-            	+"<input type='text' name='name'/>"
-            	+"<input type='file' name='pdf' class='btn-file'/>"
-            	+"<input type='submit' value='send' class='btn btn-success' style='width:100%;'/>"
-        		+"</form>"
+				+"<input type='text' name='name'/>"
+				+"<input type='file' name='pdf' class='btn-file'/>"
+				+"<input type='submit' value='send' class='btn btn-success' style='width:100%;'/>"
+				+"</form>"
 			});
 			dialog.realize();//if you want to do something on the dialog, we could use this
 			dialog.getModalHeader().css('background-color', "rgb(46,74,53)");
@@ -150,33 +243,30 @@
 			
 		});
 
-        $("#check").click(function(){
-            socket.emit("filelist", "ask");
-            socket.on("filelist", function(msg){
-                var dialog = new BootstrapDialog({
-                    title:"File List",
-                    message: function(dialogRef){
-                        var $message =  $('<div></div>');
-                        for(var i = 0; i < msg.length ;i++){
-                            $message.append("<div class='changePDF'>"+msg[i].name+"</div><hr/>")
+		$("#check").click(function(){
+			socket.emit("filelist", "ask");
+			socket.on("filelist", function(msg){
+				var dialog = new BootstrapDialog({
+					title:"File List",
+					message: function(dialogRef){
+						var $message =  $('<div></div>');
+						for(var i = 0; i < msg.length ;i++){
+							$message.append("<div class='changePDF'>"+msg[i].name+"</div><hr/>")
 									.click(function(){//add click function after append
 										socket.emit("changepdf", i);
 										socket.on("changepdf", function(msg){
-											console.log(msg);
 											//$("#pdf_display").contents.contentType = "application/pdf";
 											//$("#pdf_display").attr("src",msg);
 											app.get("/askforsrc",function(req,res){//send file to image src
-												console.log("filepath "+filepath);
 												res.contentType("application/pdf");
-												console.log("before "+__dirname+"/"+filepath);
 												res.sendFile(__dirname+"/"+filepath);
 											});
 										});
 									});
-                        }
-                        return $message;
-                    }
-                });
+								}
+								return $message;
+							}
+						});
 //why?append function not work				$("#b").on("click",function(){
 //					console.log("xxxxx");
 //				});
@@ -187,9 +277,9 @@
                 dialog.getModalBody().css('color', '#fff');
                 dialog.open();
             });
-        });
+});
 
 
-	</script>
+</script>
 </body>
 </html>

@@ -1,0 +1,36 @@
+<!--
+
+	The script will be run once.
+	The listeners will be registered once. If not find, it will be ignored,
+	append script after append the button.
+
+-->
+<!doctype html>
+<html>
+<head>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+</head>
+<body>
+	<div id="append">
+		<input type='button' value='add' text='click' id='add'/>
+	</div>
+</body>
+<script type="text/javascript">
+
+	$("#add").click(function(){
+
+		$("#append").append("<input type='button' value='click' text='click' id='click'/>");
+
+		$(document.body).append("<script  type='text/javascript'>"+
+		"$('#click').click(function(){console.log('xxx');});"+
+		"</"+"script>");
+
+	});
+
+		
+	
+
+
+	
+</script>
+</html>
