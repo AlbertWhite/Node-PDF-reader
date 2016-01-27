@@ -8,23 +8,15 @@ var upload = multer({dest:'uploads/'});//set the destiation for the files upload
 var filepath = "";
 var io = require("socket.io")(http);
 var comments = [];
-
+var filename = "";
 var fileList = [];
 
 app.get("/",function(req, res){
     res.sendFile(__dirname+"/index.html")
 });
 
-app.post('/upload_action', upload.single("pdf"), function (req, res) {
-    res.sendFile(__dirname+"/upload.html")
-    //console.log(req.body);//request.body contains all the text fields
-    console.log(req.file);//req.file get the current file
-    filepath = req.file.path;
 
-    var file = {name:req.file.originalname, path:filepath};
-    fileList.push(file);
-    //console.log(fileList);
-});
+
 
 app.get("/askforsrc",function(req,res){//send file to image src
     //console.log("filepath "+filepath);
@@ -37,11 +29,23 @@ http.listen(3000, function(){
     console.log("listening  on 3000");
 });
 
-app.get("/upload_action",function(req, res){
-    res.sendfile("upload.html");
-});
-
 io.on("connection",function(socket){
+
+    socket.on("filename",function(msg){
+        filename = msg;
+        app.post('/'+filename, upload.single("pdf"), function (req, res) {
+            console.log("inside "+filename);
+            res.sendFile(__dirname+"/upload.html")
+            //console.log("post function");//request.body contains all the text fields
+            //console.log(req.file);//req.file get the current file
+            filepath = req.file.path;
+
+            var file = {name:req.file.originalname, path:filepath};
+            fileList.push(file);
+            //console.log(fileList);
+        });
+    });
+
     console.log("a user has connected");
     io.emit("initial",comments);
     socket.on("message", function(msg){

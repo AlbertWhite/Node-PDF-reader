@@ -1,12 +1,33 @@
 <!doctype html>
 <html>
-    <head>
-    </head>
-    <body>
-        <form action="upload_action" enctype="multipart/form-data" method="post">
-            <!--<input type="text" name="name"/>-->
-            <input type="file" name="pdf"/>
-            <input type="submit" value="send"/>
-        </form>
-    </body>
+<head>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+</body>
+<script type="text/javascript">
+	var filename = "";
+	var url = filename;
+	var socket = io();
+	//we should change the action afterwards, not just using parameters
+	var form = $('<form id="form" action=""' + filename + '" enctype="multipart/form-data" method="post">' +
+		'<input type="file" id="pdf" name="pdf"/>'+
+		'<input type="submit" value="send"/>' +
+		'</form>');
+	$('body').append(form);
+
+	$("#pdf").on("change",function(){
+		filename = this.value;
+		var sub1 = filename.lastIndexOf("\\");
+		var sub2 = filename.lastIndexOf(".");
+		filename = filename.substring(sub1+1,sub2);
+		url = filename;
+		console.log(filename);
+		socket.emit("filename", filename);
+		$("#form").attr("action",filename);
+
+	});
+
+</script>
 </html>
