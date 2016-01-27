@@ -7,6 +7,7 @@ var multer = require("multer");
 var upload = multer({dest:'uploads/'});//set the destiation for the files uploaded. The files are saved in the same folder as index.js
 var filepath = "";
 var io = require("socket.io")(http);
+var comments = [];
 
 var fileList = [];
 
@@ -42,8 +43,9 @@ app.get("/upload_action",function(req, res){
 
 io.on("connection",function(socket){
     console.log("a user has connected");
+    io.emit("initial",comments);
     socket.on("message", function(msg){
-        console.dir("message "+msg);
+        comments.push(msg);
         io.emit("message", msg);
     });
     socket.on("filelist", function(msg){

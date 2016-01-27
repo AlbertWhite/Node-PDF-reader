@@ -168,6 +168,16 @@
 		var comments = [];
 		var socket = io();
 		var myDate = new Date();
+
+		socket.on("initial", function(comments){
+			for(var i = 0; i < comments.length;i++){
+				if($.inArray(comments[i].page_number,comment_page) == -1){
+					comment_page.push(comments[i].page_number);
+				}
+			}
+			sort_comments(comments);
+		});
+
 		$("form").submit(function(){
 			var message = {"user_name":username,"page_number":$("#page_number").val(), "chat_message":$("#message").val()};
 			socket.emit("message", message);
@@ -212,7 +222,7 @@
 					label:"Submit",
 					action:function(dialog){
 						username = $("#text_username").val();
-						 dialog.close();
+						dialog.close();
 					}
 				}]
 			});
