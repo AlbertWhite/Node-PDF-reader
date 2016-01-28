@@ -82,6 +82,9 @@
 		.modal-header {
 			background-color: red;
 		}
+		.modal-footer{
+			background-color: #53A771;
+		}
 
 		.btn-file {
 			position: relative;
@@ -123,6 +126,9 @@
 		}
 		.message_text{
 			margin-left:10px;
+		}
+		.changePDF{
+			color:white;
 		}
 	</style>
 </head>
@@ -250,8 +256,8 @@
 					var $message =  $('<div></div>');
 					var form = $('<form id="form" action="' + filename + '"enctype="multipart/form-data" method="post"></form>'
 						);
-					var fileinput = $('<input type="file" name="pdf"/>');
-					var filesubmit = $('<input type="submit" value="send"/>');
+					var fileinput = $('<input type="file" style="display:inline-block;" name="pdf"/>');
+					var filesubmit = $('<input class="btn btn-success" style="inline-block" type="submit" value="send"/>');
 
 					$message.append("Please select the PDF file you want to share");
 					form.append(fileinput);
@@ -290,14 +296,10 @@ $("#check").click(function(){
 			message: function(dialogRef){
 				var $message =  $('<div></div>');
 				for(var i = 0; i < msg.length ;i++){
-					var changePDF = $('<div class="changePDF">'+msg[i].name+'</div>');
+					var changePDF = $('<a class="changePDF" href='+msg[i].name+'>'+msg[i].name+'</a>');
 					$message.append(changePDF);
 					$message.append("<hr/>");
-					
-					changePDF.click(function(){//add click function after append
-						console.log("localhost:3000/"+this.outerText);
-						window.location.href="localhost:3000/"+this.outerText;
-					});
+
 				}
 				return $message;
 			}
