@@ -11,7 +11,7 @@
 	var url = filename;
 	var socket = io();
 	//we should change the action afterwards, not just using parameters
-	var form = $('<form id="form" action=""' + filename + '" enctype="multipart/form-data" method="post">' +
+	var form = $('<form id="form" action="' + filename + '"enctype="multipart/form-data" method="post">' +
 		'<input type="file" id="pdf" name="pdf"/>'+
 		'<input type="submit" value="send"/>' +
 		'</form>');

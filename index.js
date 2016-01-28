@@ -15,55 +15,57 @@ app.get("/",function(req, res){
     res.sendFile(__dirname+"/index.html")
 });
 
-
-
-
 app.get("/askforsrc",function(req,res){//send file to image src
-    //console.log("filepath "+filepath);
     res.contentType("application/pdf");
-    console.log("before "+__dirname+"/"+filepath);
     res.sendFile(__dirname+"/"+filepath);
 });
 
 http.listen(3000, function(){
-    console.log("listening  on 3000");
 });
 
 io.on("connection",function(socket){
 
+    console.log("before");
     socket.on("filename",function(msg){
+        console.log("after");    
         filename = msg;
         app.post('/'+filename, upload.single("pdf"), function (req, res) {
-            console.log("inside "+filename);
-            res.sendFile(__dirname+"/upload.html")
-            //console.log("post function");//request.body contains all the text fields
-            //console.log(req.file);//req.file get the current file
+            res.sendFile(__dirname+"/upload.html"); 
+            console.log("I am post:"+filename);
             filepath = req.file.path;
 
-            var file = {name:req.file.originalname, path:filepath};
+            var file = {"name":filename, "path":filepath};
             fileList.push(file);
-            //console.log(fileList);
+            console.dir(fileList);
+            filename = "";
+
         });
+
+        app.get('/'+filename, upload.single("pdf"), function (req, res) {
+            res.sendFile(__dirname+"/upload.html");
+            var url = req.originalUrl;
+            url = url.substring(1);
+            for(var i = 0;i < fileList.length;i++){
+                if(fileList[i].name == url){
+                    filepath = fileList[i].path;
+                }
+            }
+        });
+
     });
 
-    console.log("a user has connected");
-    io.emit("initial",comments);
-    socket.on("message", function(msg){
-        comments.push(msg);
-        io.emit("message", msg);
-    });
-    socket.on("filelist", function(msg){
-        io.emit("filelist", fileList);
-    });
-    socket.on("changepdf", function(msg){
-        //console.log(__dirname+"/"+fileList[msg - 1].path);
-
-        //io.emit("changepdf",__dirname+"/"+fileList[msg - 1].path);
-        app.get("/askforsrc",function(req,res){//send file to image src
-            //console.log("filepath "+filepath);
-            res.contentType("application/pdf");
-            //console.log("before "+__dirname+"/"+filepath);
-            res.sendFile(__dirname+"/"+filepath);
-        });
-    });
+io.emit("initial",comments);
+socket.on("message", function(msg){
+    comments.push(msg);
+    io.emit("message", msg);
+});
+socket.on("filelist", function(msg){
+    io.emit("filelist", fileList);
+});
+socket.on("changepdf", function(msg){
+        // app.get("/askforsrc",function(req,res){//send file to image src
+        //     res.contentType("application/pdf");
+        //     res.sendFile(__dirname+"/"+filepath);
+        // });
+});
 });

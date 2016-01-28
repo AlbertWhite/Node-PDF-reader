@@ -164,31 +164,41 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
 	<script type="text/javascript">
 		var username = "Human";
+		var filename="";
 		var comment_page = [];
 		var comments = [];
 		var socket = io();
 		var myDate = new Date();
+		filename = window.location.href;
+		filename = filename.substring(filename.lastIndexOf("/")+1);
 
-		socket.on("initial", function(comments){
-			for(var i = 0; i < comments.length;i++){
-				if($.inArray(comments[i].page_number,comment_page) == -1){
-					comment_page.push(comments[i].page_number);
+		socket.on("initial", function(initialcomments){
+			
+			for(var i = 0; i < initialcomments.length;i++){
+				if(initialcomments[i].filename == filename){
+					if($.inArray(initialcomments[i].page_number,comment_page) == -1){
+						comment_page.push(initialcomments[i].page_number);
+						comments.push(initialcomments[i]);
+					}
 				}
 			}
 			sort_comments(comments);
+			
 		});
 
 		$("form").submit(function(){
-			var message = {"user_name":username,"page_number":$("#page_number").val(), "chat_message":$("#message").val()};
+			var message = {"user_name":username,"page_number":$("#page_number").val(), "chat_message":$("#message").val(),"filename":filename};
 			socket.emit("message", message);
 			return false;
 		});
 		socket.on("message", function(msg){
-			if($.inArray(msg.page_number,comment_page) == -1){
-				comment_page.push(msg.page_number);
+			if(msg.filename == filename){
+				if($.inArray(msg.page_number,comment_page) == -1){
+					comment_page.push(msg.page_number);
+				}
+				comments.push({"page_number":msg.page_number,"chat_message":msg.chat_message,"user_name":msg.user_name});
+				sort_comments(comments);
 			}
-			comments.push({"page_number":msg.page_number,"chat_message":msg.chat_message,"user_name":msg.user_name});
-			sort_comments(comments);
 		});
 		function sort_comments(comments){
 
@@ -236,48 +246,62 @@
 
 			var dialog = new BootstrapDialog({
 				title:"Upload",
-				message: "Please select the PDF file you want to view<br/><br/><br/><br/><br/>"
-				+"<form action='upload_action' enctype='multipart/form-data' method='post'>"
-				+"<input type='text' name='name'/>"
-				+"<input type='file' name='pdf' class='btn-file'/>"
-				+"<input type='submit' value='send' class='btn btn-success' style='width:100%;'/>"
-				+"</form>"
+				message: function(dialogRef){
+					var $message =  $('<div></div>');
+					var form = $('<form id="form" action="' + filename + '"enctype="multipart/form-data" method="post"></form>'
+						);
+					var fileinput = $('<input type="file" name="pdf"/>');
+					var filesubmit = $('<input type="submit" value="send"/>');
+
+					$message.append("Please select the PDF file you want to share");
+					form.append(fileinput);
+					form.append(filesubmit);
+					$message.append(form);
+
+					fileinput.on("change",function(){
+						filename = this.value;
+						var sub1 = filename.lastIndexOf("\\");
+						var sub2 = filename.lastIndexOf(".");
+						filename = filename.substring(sub1+1,sub2);
+						socket.emit("filename", filename);
+						form.attr("action",filename);
+					});
+					//id has problem in element appended. better use itself
+
+					return $message;
+				}
 			});
+
 			dialog.realize();//if you want to do something on the dialog, we could use this
 			dialog.getModalHeader().css('background-color', "rgb(46,74,53)");
 			dialog.getModalBody().css('background-color', 'RGB(83,167,113)');
 			dialog.getModalBody().css('color', '#fff');
 			dialog.open();
-			
+
+
+
 		});
 
-		$("#check").click(function(){
-			socket.emit("filelist", "ask");
-			socket.on("filelist", function(msg){
-				var dialog = new BootstrapDialog({
-					title:"File List",
-					message: function(dialogRef){
-						var $message =  $('<div></div>');
-						for(var i = 0; i < msg.length ;i++){
-							$message.append("<div class='changePDF'>"+msg[i].name+"</div><hr/>")
-									.click(function(){//add click function after append
-										socket.emit("changepdf", i);
-										socket.on("changepdf", function(msg){
-											//$("#pdf_display").contents.contentType = "application/pdf";
-											//$("#pdf_display").attr("src",msg);
-											app.get("/askforsrc",function(req,res){//send file to image src
-												res.contentType("application/pdf");
-												res.sendFile(__dirname+"/"+filepath);
-											});
-										});
-									});
-								}
-								return $message;
-							}
-						});
-//why?append function not work				$("#b").on("click",function(){
-//					console.log("xxxxx");
-//				});
+$("#check").click(function(){
+	socket.emit("filelist", "ask");
+	socket.on("filelist", function(msg){
+		var dialog = new BootstrapDialog({
+			title:"File List",
+			message: function(dialogRef){
+				var $message =  $('<div></div>');
+				for(var i = 0; i < msg.length ;i++){
+					var changePDF = $('<div class="changePDF">'+msg[i].name+'</div>');
+					$message.append(changePDF);
+					$message.append("<hr/>");
+					
+					changePDF.click(function(){//add click function after append
+						console.log("localhost:3000/"+this.outerText);
+						window.location.href="localhost:3000/"+this.outerText;
+					});
+				}
+				return $message;
+			}
+		});
 
                 dialog.realize();//if you want to do something on the dialog, we could use this
                 dialog.getModalHeader().css('background-color', "rgb(46,74,53)");
