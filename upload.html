@@ -178,6 +178,7 @@
 		filename = window.location.href;
 		filename = filename.substring(filename.lastIndexOf("/")+1);
 
+		//first get initial data from server(other's comments)
 		socket.on("initial", function(initialcomments){
 			
 			for(var i = 0; i < initialcomments.length;i++){
@@ -193,10 +194,13 @@
 		});
 
 		$("form").submit(function(){
+			//all the elements are very important
 			var message = {"user_name":username,"page_number":$("#page_number").val(), "chat_message":$("#message").val(),"filename":filename};
 			socket.emit("message", message);
 			return false;
 		});
+
+		//receive messages 
 		socket.on("message", function(msg){
 			if(msg.filename == filename){
 				if($.inArray(msg.page_number,comment_page) == -1){
@@ -206,8 +210,9 @@
 				sort_comments(comments);
 			}
 		});
-		function sort_comments(comments){
 
+		//sort all the comments by page number
+		function sort_comments(comments){
 			$('#messages').empty();
 			comment_page.sort(function(a, b){return a-b});
 			for(var i = 0;i < comment_page.length;i++){
@@ -249,7 +254,6 @@
 
 
 		$("#upload").click(function(){
-
 			var dialog = new BootstrapDialog({
 				title:"Upload",
 				message: function(dialogRef){
@@ -261,11 +265,12 @@
 
 					$message.append("Please select the PDF file you want to share");
 					form.append(fileinput);
-					form.append(filesubmit);
+					form.append(filesubmit);//we need this kind of style
 					$message.append(form);
 
 					fileinput.on("change",function(){
 						filename = this.value;
+						filename = filename.replace(/\s+/g, '');
 						var sub1 = filename.lastIndexOf("\\");
 						var sub2 = filename.lastIndexOf(".");
 						filename = filename.substring(sub1+1,sub2);

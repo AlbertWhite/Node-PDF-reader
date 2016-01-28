@@ -17,14 +17,14 @@
 		'</form>');
 	$('body').append(form);
 
-	$("#pdf").on("change",function(){
+	$("#pdf").on("change",function(){//send filename to server for listening
 		filename = this.value;
 		var sub1 = filename.lastIndexOf("\\");
 		var sub2 = filename.lastIndexOf(".");
 		filename = filename.substring(sub1+1,sub2);
 		url = filename;
-		console.log(filename);
 		socket.emit("filename", filename);
+		filename = filename.replace(/\s+/g, '');//remove all the space from filename for url
 		$("#form").attr("action",filename);
 
 	});

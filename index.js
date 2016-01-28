@@ -7,7 +7,7 @@ var multer = require("multer");
 var upload = multer({dest:'uploads/'});//set the destiation for the files uploaded. The files are saved in the same folder as index.js
 var filepath = "";
 var io = require("socket.io")(http);
-var comments = [];
+var comments = [];//save all the comments
 var filename = "";
 var fileList = [];
 
@@ -24,25 +24,22 @@ http.listen(3000, function(){
 });
 
 io.on("connection",function(socket){
-
-    console.log("before");
+    //if socket get this filename, then it starts to listen to post and get 
     socket.on("filename",function(msg){
-        console.log("after");    
         filename = msg;
         app.post('/'+filename, upload.single("pdf"), function (req, res) {
             res.sendFile(__dirname+"/upload.html"); 
-            console.log("I am post:"+filename);
             filepath = req.file.path;
 
             var file = {"name":filename, "path":filepath};
             fileList.push(file);
-            console.dir(fileList);
             filename = "";
 
         });
 
         app.get('/'+filename, upload.single("pdf"), function (req, res) {
             res.sendFile(__dirname+"/upload.html");
+            //get url from request
             var url = req.originalUrl;
             url = url.substring(1);
             for(var i = 0;i < fileList.length;i++){
@@ -62,10 +59,5 @@ socket.on("message", function(msg){
 socket.on("filelist", function(msg){
     io.emit("filelist", fileList);
 });
-socket.on("changepdf", function(msg){
-        // app.get("/askforsrc",function(req,res){//send file to image src
-        //     res.contentType("application/pdf");
-        //     res.sendFile(__dirname+"/"+filepath);
-        // });
-});
+
 });
